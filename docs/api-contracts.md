@@ -81,7 +81,9 @@ None.
         "version": 4,
         "lastSyncedAt": "2026-06-12T12:00:00.000Z"
       }
-    ]
+    ],
+    "lastSyncedAt": "2026-06-12T12:00:00.000Z",
+    "source": "hcm"
   }
 }
 ```

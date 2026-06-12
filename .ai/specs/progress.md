@@ -12,7 +12,7 @@
 ## Phase 1 — Mock HCM API
 
 - [x] 05-domain-model
-- [ ] 06-batch-balances-endpoint
+- [x] 06-batch-balances-endpoint
 - [ ] 07-single-balance-endpoint
 - [ ] 08-request-submission-endpoint
 - [ ] 09-manager-decision-endpoint
@@ -52,7 +52,7 @@
 
 Phase 0: 4 / 4
 
-Phase 1: 1 / 6
+Phase 1: 2 / 6
 
 Phase 2: 0 / 5
 
@@ -62,4 +62,4 @@ Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 5 / 28
+Total: 6 / 28
