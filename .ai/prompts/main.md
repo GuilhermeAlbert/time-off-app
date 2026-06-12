@@ -62,3 +62,5 @@ Do not mark a task as completed if:
 - implementation is incomplete
 
 The progress file must always reflect the actual repository state.
+
+Do not use the "superpowers" skills!
