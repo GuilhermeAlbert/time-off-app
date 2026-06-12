@@ -26,7 +26,7 @@
 
 ## Phase 3 — Integration
 
-- [ ] 16-frontend-services
+- [x] 16-frontend-services
 - [ ] 17-balance-loading-state
 - [ ] 18-request-submission-flow
 - [ ] 19-background-reconciliation
@@ -54,10 +54,10 @@ Phase 1: 4 / 6
 
 Phase 2: 4 / 5
 
-Phase 3: 0 / 5
+Phase 3: 1 / 5
 
 Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 12 / 28
+Total: 13 / 28
