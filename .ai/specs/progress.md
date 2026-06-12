@@ -7,7 +7,7 @@
 - [x] 01-trd-draft
 - [x] 02-state-model
 - [x] 03-api-contracts
-- [ ] 04-testing-strategy
+- [x] 04-testing-strategy
 
 ## Phase 1 — Mock HCM API
 
@@ -50,7 +50,7 @@
 
 ## Completion Summary
 
-Phase 0: 3 / 4
+Phase 0: 4 / 4
 
 Phase 1: 0 / 6
 
@@ -62,4 +62,4 @@ Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 3 / 28
+Total: 4 / 28
