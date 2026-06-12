@@ -290,18 +290,12 @@ requestId=request-1
 
 ```json
 {
-  "managerId": "manager-1",
-  "decision": "approve",
-  "expectedRequestVersion": 1,
-  "expectedBalanceVersion": 5,
-  "note": "Approved",
-  "simulationMode": "normal"
+  "decision": "approve"
 }
 ```
 
-- `managerId`, `decision`, `expectedRequestVersion`, and `expectedBalanceVersion` are required.
+- `decision` is required.
 - `decision` must be `approve` or `deny`.
-- `note` and `simulationMode` are optional.
 
 ### Success Response
 
@@ -322,7 +316,8 @@ requestId=request-1
       "pendingDays": 2,
       "version": 6,
       "lastSyncedAt": "2026-06-12T12:10:00.000Z"
-    }
+    },
+    "decidedAt": "2026-06-12T12:10:00.000Z"
   }
 }
 ```
@@ -346,7 +341,8 @@ For denial:
       "pendingDays": 0,
       "version": 6,
       "lastSyncedAt": "2026-06-12T12:10:00.000Z"
-    }
+    },
+    "decidedAt": "2026-06-12T12:10:00.000Z"
   }
 }
 ```

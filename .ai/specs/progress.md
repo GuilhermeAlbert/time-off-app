@@ -15,7 +15,7 @@
 - [x] 06-batch-balances-endpoint
 - [ ] 07-single-balance-endpoint
 - [x] 08-request-submission-endpoint
-- [ ] 09-manager-decision-endpoint
+- [x] 09-manager-decision-endpoint
 - [ ] 10-anniversary-bonus-endpoint
 
 ## Phase 2 — Static UI
@@ -52,7 +52,7 @@
 
 Phase 0: 4 / 4
 
-Phase 1: 3 / 6
+Phase 1: 4 / 6
 
 Phase 2: 0 / 5
 
@@ -62,4 +62,4 @@ Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 7 / 28
+Total: 8 / 28
