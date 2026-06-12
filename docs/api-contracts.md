@@ -206,15 +206,14 @@ None.
   "locationId": "nyc",
   "startDate": "2026-07-01",
   "endDate": "2026-07-03",
-  "requestedDays": 3,
-  "reason": "Family trip",
-  "clientRequestId": "client-request-123",
+  "daysRequested": 3,
+  "notes": "Family trip",
   "simulationMode": "normal"
 }
 ```
 
-- `employeeId`, `balanceId`, `locationId`, `startDate`, `endDate`, and `requestedDays` are required.
-- `reason`, `clientRequestId`, and `simulationMode` are optional.
+- `employeeId`, `locationId`, `startDate`, `endDate`, and `daysRequested` are required.
+- `notes` and `simulationMode` are optional.
 
 ### Success Response
 
@@ -260,7 +259,7 @@ None.
 - `normal`: creates a pending request and updates pending balance.
 - `slow`: delays before creating the request.
 - `conflict`: returns `409 conflict` when the balance version changed before submission.
-- `silent-wrong`: returns success but leaves the returned balance inconsistent with the request.
+- `silent-wrong`: returns success with a pending request but leaves the balance unreserved and includes a reconciliation hint.
 - `insufficient-balance`: returns `409 insufficient-balance` without creating the request.
 
 ### Test Cases
