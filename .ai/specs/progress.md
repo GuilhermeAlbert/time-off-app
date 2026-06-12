@@ -20,7 +20,7 @@
 
 ## Phase 2 — Static UI
 
-- [ ] 11-time-off-page-layout
+- [x] 11-time-off-page-layout
 - [ ] 12-balance-cards
 - [ ] 13-request-form
 - [ ] 14-recent-requests-table
@@ -54,7 +54,7 @@ Phase 0: 4 / 4
 
 Phase 1: 4 / 6
 
-Phase 2: 0 / 5
+Phase 2: 1 / 5
 
 Phase 3: 0 / 5
 
@@ -62,4 +62,4 @@ Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 8 / 28
+Total: 9 / 28
