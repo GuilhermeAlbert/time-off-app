@@ -22,7 +22,7 @@
 - [x] 12-balance-cards
 - [x] 13-request-form
 - [ ] 14-recent-requests-table
-- [ ] 15-manager-review-page
+- [x] 15-manager-review-page
 
 ## Phase 3 — Integration
 
@@ -52,7 +52,7 @@ Phase 0: 4 / 4
 
 Phase 1: 4 / 6
 
-Phase 2: 3 / 5
+Phase 2: 4 / 5
 
 Phase 3: 0 / 5
 
@@ -60,4 +60,4 @@ Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 11 / 28
+Total: 12 / 28
