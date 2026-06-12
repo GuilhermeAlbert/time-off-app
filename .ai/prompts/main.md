@@ -43,3 +43,22 @@ At the end provide:
 - Any tradeoffs or open questions
 
 Implement only the attached spec and stop when finished.
+
+Additional requirement:
+
+When this task is completed successfully:
+
+1. Update specs/progress.md
+2. Mark the completed task as [x]
+3. Update phase totals
+4. Update overall totals
+5. Include the updated progress summary in your final report
+
+Do not mark a task as completed if:
+
+- tests fail
+- typecheck fails
+- lint fails
+- implementation is incomplete
+
+The progress file must always reflect the actual repository state.
