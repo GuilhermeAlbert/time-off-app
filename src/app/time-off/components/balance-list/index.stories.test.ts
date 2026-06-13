@@ -10,5 +10,7 @@ describe("BalanceList stories — required exports", () => {
   it("has Stale story", () => expect(stories.Stale).toBeDefined());
   it("has BalanceRefreshed story", () =>
     expect(stories.BalanceRefreshed).toBeDefined());
+  it("BalanceRefreshed story has a play function", () =>
+    expect(stories.BalanceRefreshed.play).toBeTypeOf("function"));
   it("has ErrorState story", () => expect(stories.ErrorState).toBeDefined());
 });

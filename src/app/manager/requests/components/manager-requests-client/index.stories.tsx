@@ -1,5 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/nextjs-vite";
-import { fn, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 
 import { ManagerRequestCard } from "../manager-request-card";
 import { ManagerRequestList } from "../manager-request-list";
@@ -150,7 +150,9 @@ export const ConflictAtDecisionTime: Story = {
     const canvas = within(canvasElement);
     await waitFor(() => canvas.getByRole("button", { name: /approve/i }));
     await userEvent.click(canvas.getByRole("button", { name: /approve/i }));
-    await waitFor(() => canvas.getByText(/insufficient balance/i));
+    await waitFor(() => {
+      expect(canvas.getByText(/insufficient balance/i)).toBeInTheDocument();
+    });
   },
 };
 

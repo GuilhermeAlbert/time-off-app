@@ -1,4 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, waitFor, within } from "storybook/test";
 
 import { BalanceList } from "./index";
 
@@ -130,6 +131,12 @@ export const BalanceRefreshed: Story = {
       source: "hcm",
     },
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => {
+      expect(canvas.getByText("Stale")).toBeInTheDocument();
+    });
+  },
 };
 
 export const ErrorState: Story = {

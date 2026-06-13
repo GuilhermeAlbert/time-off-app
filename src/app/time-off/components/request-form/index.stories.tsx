@@ -1,5 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/nextjs-vite";
-import { fireEvent, fn, userEvent, waitFor, within } from "storybook/test";
+import { expect, fireEvent, fn, userEvent, waitFor, within } from "storybook/test";
 
 import { RequestSection } from "../request-section";
 import { RequestForm } from "./index";
@@ -68,6 +68,9 @@ export const ValidationError: Story = {
     await userEvent.click(
       canvas.getByRole("button", { name: /submit request/i }),
     );
+    await waitFor(() => {
+      expect(canvas.getByText(/location is required/i)).toBeInTheDocument();
+    });
   },
 };
 
@@ -101,7 +104,11 @@ export const OptimisticPending: Story = {
   play: async ({ canvasElement }) => {
     await fillAndSubmit(canvasElement);
     const canvas = within(canvasElement);
-    await waitFor(() => canvas.getByText(/pending requests/i));
+    await waitFor(() => {
+      expect(canvas.getByText(/pending requests/i)).toBeInTheDocument();
+      expect(canvas.getByText("Pending")).toBeInTheDocument();
+      expect(canvas.queryByText(/approved/i)).not.toBeInTheDocument();
+    });
   },
 };
 

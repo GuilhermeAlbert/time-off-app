@@ -25,7 +25,7 @@ export function RequestForm({ onSubmit }: Props) {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div>
         <label htmlFor="location" className={labelClass}>
           Location
