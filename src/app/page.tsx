@@ -1,23 +1,10 @@
 import Link from "next/link";
+import { AppHeader } from "../components/app-header";
 
 export default function DevNavigationPage() {
   return (
     <div className="min-h-screen bg-[#FEFEFD] text-[#1C1A18]">
-      <header className="border-b border-[#F6F0E9]">
-        <div className="mx-auto flex h-14 w-full max-w-5xl items-center px-6 justify-between">
-          <Link
-            href="/"
-            className="text-sm font-semibold tracking-tight text-[#1C1A18]"
-          >
-            <img
-              src="/logo.png"
-              alt="ExampleHR"
-              draggable={false}
-              className="h-8"
-            />
-          </Link>
-        </div>
-      </header>
+      <AppHeader />
 
       <main className="mx-auto w-full max-w-5xl px-6 py-12">
         <div className="mb-10">
