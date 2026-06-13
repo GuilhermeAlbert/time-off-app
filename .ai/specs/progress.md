@@ -37,7 +37,7 @@
 - [x] 21-balance-stories
 - [x] 22-request-form-stories
 - [x] 23-requests-table-stories
-- [ ] 24-manager-review-stories
+- [x] 24-manager-review-stories
 - [ ] 25-storybook-interactions
 
 ## Phase 5 — Documentation
@@ -56,8 +56,8 @@ Phase 2: 5 / 5
 
 Phase 3: 5 / 5
 
-Phase 4: 3 / 5
+Phase 4: 4 / 5
 
 Phase 5: 0 / 3
 
-Total: 23 / 28
+Total: 24 / 28

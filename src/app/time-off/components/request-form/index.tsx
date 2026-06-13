@@ -87,6 +87,7 @@ export function RequestForm({ onSubmit }: Props) {
           {...register("daysRequested", { valueAsNumber: true })}
           className={inputClass}
           placeholder="3"
+          min="1"
         />
         {errors.daysRequested && (
           <p className="mt-1 text-xs text-red-500">
@@ -97,8 +98,7 @@ export function RequestForm({ onSubmit }: Props) {
 
       <div>
         <label htmlFor="notes" className={labelClass}>
-          Notes{" "}
-          <span className="font-normal text-zinc-400">(optional)</span>
+          Notes <span className="font-normal text-zinc-400">(optional)</span>
         </label>
         <textarea
           id="notes"
