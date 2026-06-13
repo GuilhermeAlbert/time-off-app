@@ -44,7 +44,7 @@
 
 - [x] 26-final-trd
 - [x] 27-coverage-proof
-- [ ] 28-submission-checklist
+- [x] 28-submission-checklist
 
 ## Completion Summary
 
@@ -58,6 +58,6 @@ Phase 3: 5 / 5
 
 Phase 4: 5 / 5
 
-Phase 5: 2 / 3
+Phase 5: 3 / 3
 
-Total: 27 / 28
+Total: 28 / 28
