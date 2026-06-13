@@ -35,7 +35,7 @@
 ## Phase 4 — Storybook
 
 - [x] 21-balance-stories
-- [ ] 22-request-form-stories
+- [x] 22-request-form-stories
 - [ ] 23-requests-table-stories
 - [ ] 24-manager-review-stories
 - [ ] 25-storybook-interactions
@@ -56,8 +56,8 @@ Phase 2: 5 / 5
 
 Phase 3: 5 / 5
 
-Phase 4: 1 / 5
+Phase 4: 2 / 5
 
 Phase 5: 0 / 3
 
-Total: 21 / 28
+Total: 22 / 28
