@@ -4,6 +4,7 @@ import {
   getBalance,
   submitTimeOffRequest,
 } from "../services/time-off-service";
+import type { TimeOffBalance } from "../types/time-off-balance";
 import type { TimeOffRequestFormValues } from "../types/time-off-request-form-values";
 
 const EMPLOYEE_ID = "employee-example-001";
@@ -31,11 +32,9 @@ type UseRequestSubmissionResult = {
   submit: (values: TimeOffRequestFormValues) => Promise<void>;
 };
 
-function toLocationId(location: string): string {
-  return location.toLowerCase().replace(/\s+/g, "-");
-}
-
-export function useRequestSubmission(): UseRequestSubmissionResult {
+export function useRequestSubmission(
+  balances: TimeOffBalance[],
+): UseRequestSubmissionResult {
   const [pendingRequests, setPendingRequests] = useState<OptimisticRequest[]>(
     [],
   );
@@ -47,14 +46,15 @@ export function useRequestSubmission(): UseRequestSubmissionResult {
 
   async function submit(values: TimeOffRequestFormValues): Promise<void> {
     const requestId = `optimistic-${Date.now()}`;
-    const locationId = toLocationId(values.location);
+    const locationId = values.locationId;
+    const displayLocation =
+      balances.find((b) => b.locationId === locationId)?.location ?? locationId;
 
-    // Optimistic: add pending request and mark balance as refreshing
     setPendingRequests((prev) => [
       ...prev,
       {
         id: requestId,
-        location: values.location,
+        location: displayLocation,
         requestedDays: values.daysRequested,
         startDate: values.startDate,
         endDate: values.endDate,
@@ -74,7 +74,6 @@ export function useRequestSubmission(): UseRequestSubmissionResult {
         notes: values.notes,
       })) as SubmitResponseData;
 
-      // Re-read authoritative balance (best-effort)
       if (data?.balance?.id) {
         try {
           await getBalance(data.balance.id);
@@ -89,7 +88,6 @@ export function useRequestSubmission(): UseRequestSubmissionResult {
 
       setRefreshingLocationId(null);
     } catch (err) {
-      // Roll back optimistic request on any HCM error
       setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
       setSubmissionError((err as Error).message);
       setRefreshingLocationId(null);

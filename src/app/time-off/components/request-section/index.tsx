@@ -1,5 +1,6 @@
 "use client";
 
+import { useBalances } from "../../hooks/use-balances";
 import { useRequestSubmission } from "../../hooks/use-request-submission";
 import { RecentRequestsTable } from "../recent-requests-table";
 import { RequestForm } from "../request-form";
@@ -7,8 +8,9 @@ import type { TimeOffRequest } from "../../types/time-off-request";
 import { RequestStatus } from "../../enums/request-status";
 
 export function RequestSection() {
+  const { balances, isLoading: isLoadingBalances } = useBalances();
   const { submit, pendingRequests, submissionError, reconciliationWarning } =
-    useRequestSubmission();
+    useRequestSubmission(balances);
 
   const optimisticRows: TimeOffRequest[] = pendingRequests.map((r) => ({
     id: r.id,
@@ -35,7 +37,11 @@ export function RequestSection() {
           </p>
         </div>
       )}
-      <RequestForm onSubmit={submit} />
+      <RequestForm
+        balances={balances}
+        isLoadingBalances={isLoadingBalances}
+        onSubmit={submit}
+      />
       {optimisticRows.length > 0 && (
         <div className="border-t border-[#F6F0E9] pt-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">

@@ -17,6 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 const newYorkBase = {
   id: "balance-new-york-employee-example-001",
+  locationId: "new-york",
   location: "New York",
   availableDays: 18,
   pendingDays: 0,
@@ -55,6 +56,7 @@ export const BalanceRefreshed: Story = {
   args: {
     balance: {
       id: "balance-new-york-employee-example-001",
+      locationId: "new-york",
       location: "New York",
       availableDays: 23,
       pendingDays: 3,

@@ -10,6 +10,7 @@ const INTERVAL_MS = 100;
 
 const currentBalance: TimeOffBalance = {
   id: "bal-1",
+  locationId: "new-york",
   location: "New York",
   availableDays: 18,
   pendingDays: 0,

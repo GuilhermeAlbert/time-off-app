@@ -11,6 +11,7 @@ describe("BalanceCard", () => {
 
   const balance = {
     id: "1",
+    locationId: "new-york",
     location: "New York",
     availableDays: 18,
     pendingDays: 3,

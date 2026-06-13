@@ -4,6 +4,7 @@ import type { TimeOffBalance } from "../types/time-off-balance";
 export const balances: TimeOffBalance[] = [
   {
     id: "balance-new-york",
+    locationId: "new-york",
     location: "New York",
     availableDays: 18,
     pendingDays: 0,
@@ -11,6 +12,7 @@ export const balances: TimeOffBalance[] = [
   },
   {
     id: "balance-london",
+    locationId: "london",
     location: "London",
     availableDays: 12,
     pendingDays: 0,
@@ -18,6 +20,7 @@ export const balances: TimeOffBalance[] = [
   },
   {
     id: "balance-remote",
+    locationId: "remote",
     location: "Remote",
     availableDays: 22,
     pendingDays: 0,

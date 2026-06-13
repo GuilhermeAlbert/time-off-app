@@ -2,10 +2,23 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { SyncStatus } from "../enums/sync-status";
+import type { TimeOffBalance } from "../types/time-off-balance";
 import { useRequestSubmission } from "./use-request-submission";
 
+const mockBalances: TimeOffBalance[] = [
+  {
+    id: "balance-new-york",
+    locationId: "new-york",
+    location: "New York",
+    availableDays: 18,
+    pendingDays: 0,
+    syncStatus: SyncStatus.Fresh,
+  },
+];
+
 const validValues = {
-  location: "New York",
+  locationId: "new-york",
   startDate: "2026-07-01",
   endDate: "2026-07-03",
   daysRequested: 3,
@@ -40,7 +53,7 @@ describe("useRequestSubmission", () => {
 
   it("valid submission creates optimistic pending request", async () => {
     vi.stubGlobal("fetch", makeSuccessFetch());
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     await act(async () => {
       await result.current.submit(validValues);
@@ -53,7 +66,7 @@ describe("useRequestSubmission", () => {
 
   it("affected balance becomes refreshing during submission", async () => {
     vi.stubGlobal("fetch", vi.fn().mockReturnValue(new Promise(() => {})));
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     act(() => {
       void result.current.submit(validValues);
@@ -66,7 +79,7 @@ describe("useRequestSubmission", () => {
 
   it("successful HCM response keeps request as pending, never approved", async () => {
     vi.stubGlobal("fetch", makeSuccessFetch());
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     await act(async () => {
       await result.current.submit(validValues);
@@ -81,7 +94,7 @@ describe("useRequestSubmission", () => {
       "fetch",
       makeErrorFetch("HCM balance changed before request submission"),
     );
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     await act(async () => {
       await result.current.submit(validValues);
@@ -96,7 +109,7 @@ describe("useRequestSubmission", () => {
       "fetch",
       makeErrorFetch("Requested days exceed available balance"),
     );
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     await act(async () => {
       await result.current.submit(validValues);
@@ -115,7 +128,7 @@ describe("useRequestSubmission", () => {
         reconciliationHint: "silent-wrong-balance-not-reserved",
       }),
     );
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     await act(async () => {
       await result.current.submit(validValues);
@@ -126,13 +139,12 @@ describe("useRequestSubmission", () => {
 
   it("UI never shows approved immediately after employee submission", async () => {
     vi.stubGlobal("fetch", makeSuccessFetch());
-    const { result } = renderHook(() => useRequestSubmission());
+    const { result } = renderHook(() => useRequestSubmission(mockBalances));
 
     await act(async () => {
       await result.current.submit(validValues);
     });
 
-    // Employee submission result is always shown as pending — never approved
     const statuses = result.current.pendingRequests.map((r) => r.status);
     expect(statuses).not.toContain("approved");
     expect(statuses).not.toContain("confirmed");

@@ -6,6 +6,7 @@ import { detectChangedBalanceIds } from "./compare-balances";
 
 const balance: TimeOffBalance = {
   id: "bal-1",
+  locationId: "new-york",
   location: "New York",
   availableDays: 18,
   pendingDays: 0,

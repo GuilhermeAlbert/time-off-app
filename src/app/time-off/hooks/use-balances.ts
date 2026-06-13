@@ -48,6 +48,7 @@ export function useBalances(): UseBalancesResult {
         const response = data as GetBalancesData;
         const mapped: TimeOffBalance[] = response.balances.map((b) => ({
           id: b.id,
+          locationId: b.locationId,
           location: toDisplayLocation(b.locationId),
           availableDays: b.availableDays,
           pendingDays: b.pendingDays,
