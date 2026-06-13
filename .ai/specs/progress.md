@@ -29,7 +29,7 @@
 - [x] 16-frontend-services
 - [x] 17-balance-loading-state
 - [x] 18-request-submission-flow
-- [ ] 19-background-reconciliation
+- [x] 19-background-reconciliation
 - [ ] 20-manager-decision-flow
 
 ## Phase 4 — Storybook
@@ -54,10 +54,10 @@ Phase 1: 4 / 6
 
 Phase 2: 4 / 5
 
-Phase 3: 3 / 5
+Phase 3: 4 / 5
 
 Phase 4: 0 / 5
 
 Phase 5: 0 / 3
 
-Total: 15 / 28
+Total: 16 / 28
