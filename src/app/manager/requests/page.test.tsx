@@ -9,8 +9,13 @@ describe("ManagerRequestsPage", () => {
     expect(html).toContain("Manager Review");
   });
 
-  it("renders pending request", () => {
+  it("renders manager workspace label", () => {
     const html = renderToStaticMarkup(<ManagerRequestsPage />);
-    expect(html).toContain("2026-07-01");
+    expect(html).toContain("Manager workspace");
+  });
+
+  it("renders loading state while requests are fetched", () => {
+    const html = renderToStaticMarkup(<ManagerRequestsPage />);
+    expect(html).toContain("Loading requests");
   });
 });

@@ -1,5 +1,4 @@
-import { ManagerRequestList } from "./components/manager-request-list";
-import { pendingRequests } from "./data/requests";
+import { ManagerRequestsClient } from "./components/manager-requests-client";
 
 export default function ManagerRequestsPage() {
   return (
@@ -18,7 +17,7 @@ export default function ManagerRequestsPage() {
           </h1>
         </section>
 
-        <ManagerRequestList requests={pendingRequests} />
+        <ManagerRequestsClient />
       </main>
     </div>
   );

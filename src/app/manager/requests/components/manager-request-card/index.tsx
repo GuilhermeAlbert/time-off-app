@@ -2,9 +2,11 @@ import type { ManagerPendingRequest } from "../../types/manager-pending-request"
 
 type Props = {
   request: ManagerPendingRequest;
+  onApprove?: (id: string) => void;
+  onDeny?: (id: string) => void;
 };
 
-export function ManagerRequestCard({ request }: Props) {
+export function ManagerRequestCard({ request, onApprove, onDeny }: Props) {
   return (
     <div>
       <p>{request.employeeName}</p>
@@ -16,8 +18,12 @@ export function ManagerRequestCard({ request }: Props) {
         Available: {request.availableBalance} days · Pending:{" "}
         {request.pendingBalance} days
       </p>
-      <button type="button">Approve</button>
-      <button type="button">Deny</button>
+      <button type="button" onClick={() => onApprove?.(request.id)}>
+        Approve
+      </button>
+      <button type="button" onClick={() => onDeny?.(request.id)}>
+        Deny
+      </button>
     </div>
   );
 }
