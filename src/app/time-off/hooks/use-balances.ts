@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 
 import { getBalances } from "../services/time-off-service";
-import type { SyncStatus } from "../enums/sync-status";
+import { SyncStatus } from "../enums/sync-status";
 import type { TimeOffBalance } from "../types/time-off-balance";
+
+const knownSyncStatuses = new Set<string>(Object.values(SyncStatus));
+
+function toFeatureSyncStatus(hcmStatus: string): SyncStatus {
+  return knownSyncStatuses.has(hcmStatus)
+    ? (hcmStatus as SyncStatus)
+    : SyncStatus.Stale;
+}
 
 type HcmBalance = {
   id: string;
@@ -43,7 +51,7 @@ export function useBalances(): UseBalancesResult {
           location: toDisplayLocation(b.locationId),
           availableDays: b.availableDays,
           pendingDays: b.pendingDays,
-          syncStatus: b.syncStatus as SyncStatus,
+          syncStatus: toFeatureSyncStatus(b.syncStatus),
         }));
         setBalances(mapped);
         setIsLoading(false);

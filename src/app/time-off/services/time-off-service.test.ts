@@ -65,7 +65,7 @@ describe("time-off-service", () => {
     await triggerAnniversaryBonus();
 
     expect(fetch.mock.calls[0][0]).toBe(
-      "/api/hcm/balances/anniversary-bonus",
+      "/api/hcm/simulations/anniversary-bonus",
     );
     expect(fetch.mock.calls[0][1]).toMatchObject({ method: "POST" });
   });

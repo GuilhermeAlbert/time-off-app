@@ -131,3 +131,15 @@ export async function POST(request: Request) {
 
   return Response.json(response, { status: 201 });
 }
+
+export function GET() {
+  const pending = timeOffRequests.filter(
+    (r) => r.status === RequestStatus.Pending,
+  );
+
+  const response: HcmSuccessResponse<{ requests: TimeOffRequest[] }> = {
+    data: { requests: pending.map((r) => ({ ...r })) },
+  };
+
+  return Response.json(response);
+}

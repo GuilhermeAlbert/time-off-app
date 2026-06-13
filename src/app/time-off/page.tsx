@@ -1,3 +1,8 @@
+import { BalanceList } from "./components/balance-list";
+import { RecentRequestsTable } from "./components/recent-requests-table";
+import { RequestSection } from "./components/request-section";
+import { requests } from "./data/requests";
+
 export default function TimeOffPage() {
   return (
     <div className="min-h-screen bg-white text-zinc-950">
@@ -28,10 +33,8 @@ export default function TimeOffPage() {
           >
             Balance cards
           </h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            <div className="h-28 rounded-xl border border-zinc-200 bg-zinc-50" />
-            <div className="h-28 rounded-xl border border-zinc-200 bg-zinc-50" />
-            <div className="h-28 rounded-xl border border-zinc-200 bg-zinc-50" />
+          <div className="mt-5">
+            <BalanceList />
           </div>
         </section>
 
@@ -46,10 +49,8 @@ export default function TimeOffPage() {
             >
               Request form
             </h2>
-            <div className="mt-5 space-y-4">
-              <div className="h-12 rounded-xl border border-zinc-200 bg-zinc-50" />
-              <div className="h-12 rounded-xl border border-zinc-200 bg-zinc-50" />
-              <div className="h-28 rounded-xl border border-zinc-200 bg-zinc-50" />
+            <div className="mt-5">
+              <RequestSection />
             </div>
           </section>
 
@@ -63,11 +64,8 @@ export default function TimeOffPage() {
             >
               Recent requests table
             </h2>
-            <div className="mt-5 overflow-hidden rounded-xl border border-zinc-200">
-              <div className="h-12 border-b border-zinc-200 bg-zinc-50" />
-              <div className="h-14 border-b border-zinc-100 bg-white" />
-              <div className="h-14 border-b border-zinc-100 bg-white" />
-              <div className="h-14 bg-white" />
+            <div className="mt-5">
+              <RecentRequestsTable requests={requests} />
             </div>
           </section>
         </div>

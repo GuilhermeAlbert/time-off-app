@@ -40,7 +40,7 @@ export async function submitTimeOffRequest(input: SubmitTimeOffRequestInput) {
 }
 
 export async function triggerAnniversaryBonus(input?: AnniversaryBonusInput) {
-  return hcmFetch("/api/hcm/balances/anniversary-bonus", {
+  return hcmFetch("/api/hcm/simulations/anniversary-bonus", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input ?? {}),

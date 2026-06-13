@@ -6,7 +6,7 @@ import { HcmErrorCode } from "../enums/hcm-error-code";
 import { HcmSimulationMode } from "../enums/hcm-simulation-mode";
 import { RequestStatus } from "../enums/request-status";
 import { resetHcmData } from "../helpers/reset-hcm-data";
-import { POST } from "./route";
+import { GET, POST } from "./route";
 
 function createRequest(body: Record<string, unknown>) {
   return new Request("http://localhost/api/hcm/requests", {
@@ -160,5 +160,29 @@ describe("POST /api/hcm/requests", () => {
       status: RequestStatus.Pending,
       createdAt: "2026-06-12T12:05:00.000Z",
     });
+  });
+});
+
+describe("GET /api/hcm/requests", () => {
+  beforeEach(() => {
+    resetHcmData();
+  });
+
+  it("returns empty list when no pending requests exist", async () => {
+    const response = await GET();
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.data.requests).toEqual([]);
+  });
+
+  it("returns only pending requests", async () => {
+    await POST(createRequest(validRequestBody()));
+
+    const response = await GET();
+    const body = await response.json();
+
+    expect(body.data.requests).toHaveLength(1);
+    expect(body.data.requests[0].status).toBe(RequestStatus.Pending);
   });
 });
