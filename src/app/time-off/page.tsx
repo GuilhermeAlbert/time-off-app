@@ -5,66 +5,59 @@ import { requests } from "./data/requests";
 
 export default function TimeOffPage() {
   return (
-    <div className="min-h-screen bg-white text-zinc-950">
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center px-6">
-          <p className="text-base font-semibold tracking-normal">ExampleHR</p>
+    <div className="min-h-screen bg-[#FEFEFD] text-[#1C1A18]">
+      <header className="border-b border-[#F6F0E9]">
+        <div className="mx-auto flex h-14 w-full max-w-5xl items-center px-6">
+          <p className="text-sm font-semibold tracking-tight text-[#1C1A18]">
+            ExampleHR
+          </p>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1200px] px-6 py-10">
-        <section className="mb-8">
-          <p className="text-sm font-medium text-zinc-500">Employee workspace</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-normal text-zinc-950">
+      <main className="mx-auto w-full max-w-5xl px-6 py-10">
+        <div className="mb-8 border-b border-[#F6F0E9] pb-8">
+          <p className="text-xs font-medium uppercase tracking-widest text-[#904209]">
+            Employee workspace
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#1C1A18]">
             Time Off
           </h1>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
+          <p className="mt-1.5 text-sm text-zinc-500">
             Request time off and track balance changes.
           </p>
-        </section>
+        </div>
 
-        <section
-          aria-labelledby="balance-cards-heading"
-          className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
-        >
+        <section aria-labelledby="balance-cards-heading" className="mb-8">
           <h2
             id="balance-cards-heading"
-            className="text-lg font-semibold tracking-normal text-zinc-950"
+            className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-400"
           >
             Balance cards
           </h2>
-          <div className="mt-5">
-            <BalanceList />
-          </div>
+          <BalanceList />
         </section>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,420px)_1fr]">
-          <section
-            aria-labelledby="request-form-heading"
-            className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
-          >
+        <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
+          <section aria-labelledby="request-form-heading">
             <h2
               id="request-form-heading"
-              className="text-lg font-semibold tracking-normal text-zinc-950"
+              className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-400"
             >
               Request form
             </h2>
-            <div className="mt-5">
+            <div className="rounded-xl border border-[#F6F0E9] bg-[#FEFBF5] p-6">
               <RequestSection />
             </div>
           </section>
 
-          <section
-            aria-labelledby="recent-requests-heading"
-            className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
-          >
+          <section aria-labelledby="recent-requests-heading">
             <h2
               id="recent-requests-heading"
-              className="text-lg font-semibold tracking-normal text-zinc-950"
+              className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-400"
             >
               Recent requests table
             </h2>
-            <div className="mt-5">
+            <div className="overflow-hidden rounded-xl border border-[#F6F0E9] bg-[#FEFBF5]">
               <RecentRequestsTable requests={requests} />
             </div>
           </section>

@@ -19,18 +19,31 @@ export function RequestSection() {
   }));
 
   return (
-    <div>
+    <div className="space-y-4">
       {reconciliationWarning && (
-        <p>
-          Balance may not reflect your latest request yet. Check back shortly.
-        </p>
+        <div className="rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
+          <p className="text-xs text-amber-700">
+            Balance may not reflect your latest request yet. Check back
+            shortly.
+          </p>
+        </div>
       )}
-      {submissionError && <p>Submission failed: {submissionError}</p>}
+      {submissionError && (
+        <div className="rounded-lg border border-red-100 bg-red-50 px-4 py-3">
+          <p className="text-xs text-red-600">
+            Submission failed: {submissionError}
+          </p>
+        </div>
+      )}
       <RequestForm onSubmit={submit} />
       {optimisticRows.length > 0 && (
-        <div>
-          <p>Pending requests</p>
-          <RecentRequestsTable requests={optimisticRows} />
+        <div className="border-t border-[#F6F0E9] pt-4">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">
+            Pending requests
+          </p>
+          <div className="overflow-hidden rounded-xl border border-[#F6F0E9]">
+            <RecentRequestsTable requests={optimisticRows} />
+          </div>
         </div>
       )}
     </div>
