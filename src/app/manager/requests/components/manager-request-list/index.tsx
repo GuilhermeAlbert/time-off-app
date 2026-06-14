@@ -5,9 +5,10 @@ type Props = {
   requests: ManagerPendingRequest[];
   onApprove?: (id: string) => void;
   onDeny?: (id: string) => void;
+  decidingRequestId?: string | null;
 };
 
-export function ManagerRequestList({ requests, onApprove, onDeny }: Props) {
+export function ManagerRequestList({ requests, onApprove, onDeny, decidingRequestId }: Props) {
   if (requests.length === 0) {
     return (
       <div className="rounded-xl border border-[#F6F0E9] bg-[#FEFBF5] px-6 py-10 text-center">
@@ -27,6 +28,7 @@ export function ManagerRequestList({ requests, onApprove, onDeny }: Props) {
           request={request}
           onApprove={onApprove}
           onDeny={onDeny}
+          decidingRequestId={decidingRequestId}
         />
       ))}
     </div>

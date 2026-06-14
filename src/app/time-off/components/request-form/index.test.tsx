@@ -176,6 +176,26 @@ describe("RequestForm — balance info display", () => {
       expect(screen.getByText(/stale/i)).toBeInTheDocument();
     });
   });
+
+  it("shows refreshing badge when selected balance is refreshing", async () => {
+    const refreshingBalances: TimeOffBalance[] = [
+      {
+        id: "b1",
+        locationId: "new-york",
+        location: "New York",
+        availableDays: 18,
+        pendingDays: 0,
+        syncStatus: SyncStatus.Refreshing,
+      },
+    ];
+    renderForm(refreshingBalances);
+    fireEvent.change(screen.getByLabelText(/location/i), {
+      target: { value: "new-york" },
+    });
+    await waitFor(() => {
+      expect(screen.getAllByText(/refreshing/i).length).toBeGreaterThanOrEqual(1);
+    });
+  });
 });
 
 describe("RequestForm — date validations", () => {

@@ -3,10 +3,12 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { timeOffBalances } from "../data/balances";
 import { timeOffRequests } from "../data/requests";
 import { HcmErrorCode } from "../enums/hcm-error-code";
+import { ManagerDecision } from "../enums/manager-decision";
 import { HcmSimulationMode } from "../enums/hcm-simulation-mode";
 import { RequestStatus } from "../enums/request-status";
 import { resetHcmData } from "../helpers/reset-hcm-data";
 import { GET, POST } from "./route";
+import { POST as postDecision } from "./[request-id]/decision/route";
 
 function createRequest(body: Record<string, unknown>) {
   return new Request("http://localhost/api/hcm/requests", {
@@ -184,5 +186,24 @@ describe("GET /api/hcm/requests", () => {
 
     expect(body.data.requests).toHaveLength(1);
     expect(body.data.requests[0].status).toBe(RequestStatus.Pending);
+  });
+
+  it("returns only pending requests after a deny decision — decided request is excluded", async () => {
+    await POST(createRequest(validRequestBody()));
+    const requestId = timeOffRequests[0].id;
+
+    await postDecision(
+      new Request(`http://localhost/api/hcm/requests/${requestId}/decision`, {
+        method: "POST",
+        body: JSON.stringify({ decision: ManagerDecision.Deny }),
+        headers: { "content-type": "application/json" },
+      }),
+      { params: Promise.resolve({ "request-id": requestId }) },
+    );
+
+    const response = await GET();
+    const body = await response.json();
+
+    expect(body.data.requests).toHaveLength(0);
   });
 });

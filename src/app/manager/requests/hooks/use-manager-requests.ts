@@ -13,6 +13,7 @@ type UseManagerRequestsResult = {
   isLoading: boolean;
   error: string | null;
   decisionError: string | null;
+  decidingRequestId: string | null;
   approve: (requestId: string) => Promise<void>;
   deny: (requestId: string) => Promise<void>;
 };
@@ -22,6 +23,7 @@ export function useManagerRequests(): UseManagerRequestsResult {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [decisionError, setDecisionError] = useState<string | null>(null);
+  const [decidingRequestId, setDecidingRequestId] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -57,23 +59,29 @@ export function useManagerRequests(): UseManagerRequestsResult {
 
   async function approve(requestId: string) {
     setDecisionError(null);
+    setDecidingRequestId(requestId);
     try {
       await approveRequest(requestId);
       setRequests((prev) => prev.filter((r) => r.id !== requestId));
     } catch (e) {
       setDecisionError(e instanceof Error ? e.message : "Approval failed");
+    } finally {
+      setDecidingRequestId(null);
     }
   }
 
   async function deny(requestId: string) {
     setDecisionError(null);
+    setDecidingRequestId(requestId);
     try {
       await denyRequest(requestId);
       setRequests((prev) => prev.filter((r) => r.id !== requestId));
     } catch (e) {
       setDecisionError(e instanceof Error ? e.message : "Denial failed");
+    } finally {
+      setDecidingRequestId(null);
     }
   }
 
-  return { requests, isLoading, error, decisionError, approve, deny };
+  return { requests, isLoading, error, decisionError, decidingRequestId, approve, deny };
 }

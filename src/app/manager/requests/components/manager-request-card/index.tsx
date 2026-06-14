@@ -4,9 +4,11 @@ type Props = {
   request: ManagerPendingRequest;
   onApprove?: (id: string) => void;
   onDeny?: (id: string) => void;
+  decidingRequestId?: string | null;
 };
 
-export function ManagerRequestCard({ request, onApprove, onDeny }: Props) {
+export function ManagerRequestCard({ request, onApprove, onDeny, decidingRequestId }: Props) {
+  const isDeciding = decidingRequestId === request.id;
   return (
     <div className="rounded-xl border border-[#F6F0E9] bg-[#FEFBF5] p-5">
       <div className="flex items-start justify-between gap-4">
@@ -48,14 +50,16 @@ export function ManagerRequestCard({ request, onApprove, onDeny }: Props) {
           <button
             type="button"
             onClick={() => onDeny?.(request.id)}
-            className="rounded-lg border border-[#F6F0E9] bg-white px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+            disabled={isDeciding}
+            className="rounded-lg border border-[#F6F0E9] bg-white px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Deny
           </button>
           <button
             type="button"
             onClick={() => onApprove?.(request.id)}
-            className="rounded-lg bg-[#904209] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#7A3607]"
+            disabled={isDeciding}
+            className="rounded-lg bg-[#904209] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#7A3607] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Approve
           </button>

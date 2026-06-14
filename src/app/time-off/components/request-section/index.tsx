@@ -1,16 +1,39 @@
 "use client";
 
 import { useBalances } from "../../hooks/use-balances";
+import { useReconciliation } from "../../hooks/use-reconciliation";
 import { useRequestSubmission } from "../../hooks/use-request-submission";
+import { SyncStatus } from "../../enums/sync-status";
+import { RequestStatus } from "../../enums/request-status";
 import { RecentRequestsTable } from "../recent-requests-table";
 import { RequestForm } from "../request-form";
 import type { TimeOffRequest } from "../../types/time-off-request";
-import { RequestStatus } from "../../enums/request-status";
 
 export function RequestSection() {
   const { balances, isLoading: isLoadingBalances } = useBalances();
-  const { submit, pendingRequests, submissionError, reconciliationWarning } =
-    useRequestSubmission(balances);
+  const {
+    submit,
+    pendingRequests,
+    refreshingLocationId,
+    submissionError,
+    reconciliationWarning,
+  } = useRequestSubmission(balances);
+
+  const isSubmitting = refreshingLocationId !== null;
+  const { balanceRefreshed, staleBalanceIds } = useReconciliation(
+    balances,
+    isSubmitting,
+  );
+
+  // Overlay refreshing + mid-session-stale states onto the balance list that
+  // the form sees, without mutating the source balances from useBalances.
+  const displayBalances = balances.map((b) => {
+    if (b.locationId === refreshingLocationId)
+      return { ...b, syncStatus: SyncStatus.Refreshing };
+    if (staleBalanceIds.includes(b.id))
+      return { ...b, syncStatus: SyncStatus.Stale };
+    return b;
+  });
 
   const optimisticRows: TimeOffRequest[] = pendingRequests.map((r) => ({
     id: r.id,
@@ -22,6 +45,14 @@ export function RequestSection() {
 
   return (
     <div className="space-y-4">
+      {balanceRefreshed && (
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3">
+          <p className="text-xs text-zinc-600">
+            Your balance was updated by HCM. Reload the page to see the latest
+            values.
+          </p>
+        </div>
+      )}
       {reconciliationWarning && (
         <div className="rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
           <p className="text-xs text-amber-700">
@@ -38,7 +69,7 @@ export function RequestSection() {
         </div>
       )}
       <RequestForm
-        balances={balances}
+        balances={displayBalances}
         isLoadingBalances={isLoadingBalances}
         onSubmit={submit}
       />

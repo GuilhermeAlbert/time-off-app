@@ -7,6 +7,7 @@ import { SyncStatus } from "../../enums/sync-status";
 import { requestSchema } from "../../schemas/request-schema";
 import type { TimeOffBalance } from "../../types/time-off-balance";
 import type { TimeOffRequestFormValues } from "../../types/time-off-request-form-values";
+import { SyncStatusBadge } from "../sync-status-badge";
 
 type Props = {
   balances: TimeOffBalance[];
@@ -18,6 +19,13 @@ const inputClass =
   "block w-full rounded-lg border border-[#F6F0E9] bg-white px-3 py-2 text-sm text-[#1C1A18] placeholder:text-zinc-400 focus:border-[#904209] focus:outline-none focus:ring-1 focus:ring-[#904209]";
 
 const labelClass = "mb-1.5 block text-xs font-medium text-zinc-600";
+
+function toDateStr(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
 
 function computeDays(startDate: string, endDate: string): number | null {
   if (!startDate || !endDate) return null;
@@ -43,6 +51,7 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
   const startDate = useWatch({ control, name: "startDate" });
   const endDate = useWatch({ control, name: "endDate" });
 
+  const todayStr = toDateStr(new Date());
   const computedDays = computeDays(startDate ?? "", endDate ?? "");
 
   const selectedBalance = balances.find(
@@ -53,6 +62,7 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
     computedDays !== null &&
     computedDays > selectedBalance.availableDays;
 
+  const isRefreshing = selectedBalance?.syncStatus === SyncStatus.Refreshing;
   const isStale = selectedBalance?.syncStatus === SyncStatus.Stale;
 
   // daysRequested is computed from dates and injected here, not entered by the user
@@ -90,19 +100,29 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
 
         {selectedBalance && (
           <div className="mt-2 rounded-md border border-[#F6F0E9] bg-[#FEFBF5] px-3 py-2 text-xs text-zinc-600">
-            <span>
-              Available: <strong>{selectedBalance.availableDays}</strong> day
-              {selectedBalance.availableDays !== 1 ? "s" : ""}
-            </span>
-            {selectedBalance.pendingDays > 0 && (
-              <span className="ml-3">
-                Pending: <strong>{selectedBalance.pendingDays}</strong> day
-                {selectedBalance.pendingDays !== 1 ? "s" : ""}
-              </span>
-            )}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span>
+                  Available: <strong>{selectedBalance.availableDays}</strong> day
+                  {selectedBalance.availableDays !== 1 ? "s" : ""}
+                </span>
+                {selectedBalance.pendingDays > 0 && (
+                  <span>
+                    Pending: <strong>{selectedBalance.pendingDays}</strong> day
+                    {selectedBalance.pendingDays !== 1 ? "s" : ""}
+                  </span>
+                )}
+              </div>
+              {isRefreshing && <SyncStatusBadge status={SyncStatus.Refreshing} />}
+            </div>
           </div>
         )}
 
+        {isRefreshing && (
+          <p className="mt-1 text-xs text-zinc-500">
+            Refreshing balance from HCM…
+          </p>
+        )}
         {isStale && (
           <p className="mt-1 text-xs text-amber-600">
             Balance is stale. HCM will re-check before accepting this request.
@@ -118,6 +138,7 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
           <input
             id="startDate"
             type="date"
+            min={todayStr}
             {...register("startDate")}
             className={inputClass}
           />
@@ -135,6 +156,7 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
           <input
             id="endDate"
             type="date"
+            min={startDate || todayStr}
             {...register("endDate")}
             className={inputClass}
           />

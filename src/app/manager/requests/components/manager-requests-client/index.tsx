@@ -4,7 +4,7 @@ import { useManagerRequests } from "../../hooks/use-manager-requests";
 import { ManagerRequestList } from "../manager-request-list";
 
 export function ManagerRequestsClient() {
-  const { requests, isLoading, error, decisionError, approve, deny } =
+  const { requests, isLoading, error, decisionError, decidingRequestId, approve, deny } =
     useManagerRequests();
 
   if (isLoading) {
@@ -40,6 +40,7 @@ export function ManagerRequestsClient() {
         requests={requests}
         onApprove={approve}
         onDeny={deny}
+        decidingRequestId={decidingRequestId}
       />
     </div>
   );

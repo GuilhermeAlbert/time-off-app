@@ -1,5 +1,10 @@
+// @vitest-environment jsdom
+import "@testing-library/jest-dom/vitest";
+import { cleanup, render, screen } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+
+afterEach(cleanup);
 
 import { ManagerRequestCard } from "./index";
 
@@ -44,5 +49,27 @@ describe("ManagerRequestCard", () => {
   it("renders deny button", () => {
     const html = renderToStaticMarkup(<ManagerRequestCard request={request} />);
     expect(html).toContain("Deny");
+  });
+
+  it("disables both buttons when decidingRequestId matches this card's request", () => {
+    render(
+      <ManagerRequestCard
+        request={request}
+        decidingRequestId={request.id}
+      />,
+    );
+    expect(screen.getByRole("button", { name: /deny/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /approve/i })).toBeDisabled();
+  });
+
+  it("does not disable buttons when a different request is deciding", () => {
+    render(
+      <ManagerRequestCard
+        request={request}
+        decidingRequestId="some-other-request-id"
+      />,
+    );
+    expect(screen.getByRole("button", { name: /deny/i })).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: /approve/i })).not.toBeDisabled();
   });
 });
