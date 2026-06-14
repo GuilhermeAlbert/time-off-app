@@ -19,30 +19,50 @@ const inputClass =
 
 const labelClass = "mb-1.5 block text-xs font-medium text-zinc-600";
 
+function computeDays(startDate: string, endDate: string): number | null {
+  if (!startDate || !endDate) return null;
+  const start = new Date(startDate + "T00:00:00");
+  const end = new Date(endDate + "T00:00:00");
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+  const days =
+    Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  return days > 0 ? days : null;
+}
+
 export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<TimeOffRequestFormValues>({
+  } = useForm({
     resolver: zodResolver(requestSchema),
   });
 
   const selectedLocationId = useWatch({ control, name: "locationId" });
-  const daysRequested = useWatch({ control, name: "daysRequested" });
+  const startDate = useWatch({ control, name: "startDate" });
+  const endDate = useWatch({ control, name: "endDate" });
 
-  const selectedBalance = balances.find((b) => b.locationId === selectedLocationId);
+  const computedDays = computeDays(startDate ?? "", endDate ?? "");
+
+  const selectedBalance = balances.find(
+    (b) => b.locationId === selectedLocationId,
+  );
   const balanceExceeded =
     selectedBalance !== undefined &&
-    typeof daysRequested === "number" &&
-    daysRequested > 0 &&
-    daysRequested > selectedBalance.availableDays;
+    computedDays !== null &&
+    computedDays > selectedBalance.availableDays;
 
   const isStale = selectedBalance?.syncStatus === SyncStatus.Stale;
 
+  // daysRequested is computed from dates and injected here, not entered by the user
+  const handleFormSubmit = handleSubmit((rawValues) => {
+    if (computedDays === null || computedDays <= 0) return;
+    onSubmit({ ...rawValues, daysRequested: computedDays } as TimeOffRequestFormValues);
+  });
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <form onSubmit={handleFormSubmit} className="space-y-4" noValidate>
       <div>
         <label htmlFor="locationId" className={labelClass}>
           Location
@@ -63,7 +83,9 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
           ))}
         </select>
         {errors.locationId && (
-          <p className="mt-1 text-xs text-red-500">{errors.locationId.message}</p>
+          <p className="mt-1 text-xs text-red-500">
+            {errors.locationId.message as string}
+          </p>
         )}
 
         {selectedBalance && (
@@ -101,7 +123,7 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
           />
           {errors.startDate && (
             <p className="mt-1 text-xs text-red-500">
-              {errors.startDate.message}
+              {errors.startDate.message as string}
             </p>
           )}
         </div>
@@ -118,30 +140,27 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
           />
           {errors.endDate && (
             <p className="mt-1 text-xs text-red-500">
-              {errors.endDate.message}
+              {errors.endDate.message as string}
             </p>
           )}
         </div>
       </div>
 
       <div>
-        <label htmlFor="daysRequested" className={labelClass}>
-          Days requested
-        </label>
-        <input
-          id="daysRequested"
-          type="number"
-          {...register("daysRequested", { valueAsNumber: true })}
-          className={inputClass}
-          placeholder="3"
-          min="1"
-        />
-        {errors.daysRequested && (
-          <p className="mt-1 text-xs text-red-500">
-            {errors.daysRequested.message}
-          </p>
-        )}
-        {balanceExceeded && !errors.daysRequested && (
+        <p className={labelClass}>Days requested</p>
+        <div
+          aria-label="days requested"
+          className="flex items-center gap-1.5 rounded-lg border border-[#F6F0E9] bg-[#F6F0E9] px-3 py-2 text-sm text-zinc-500"
+        >
+          {computedDays !== null ? (
+            <span className="font-medium text-[#1C1A18]">
+              {computedDays} day{computedDays !== 1 ? "s" : ""}
+            </span>
+          ) : (
+            <span className="text-zinc-400">Select dates above</span>
+          )}
+        </div>
+        {balanceExceeded && (
           <p className="mt-1 text-xs text-red-500">
             Requested days exceed available balance for this location
           </p>
@@ -163,7 +182,9 @@ export function RequestForm({ balances, isLoadingBalances, onSubmit }: Props) {
 
       <button
         type="submit"
-        disabled={balanceExceeded || (balances.length === 0 && !isLoadingBalances)}
+        disabled={
+          balanceExceeded || (balances.length === 0 && !isLoadingBalances)
+        }
         className="w-full rounded-lg bg-[#904209] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#7A3607] focus:outline-none focus:ring-2 focus:ring-[#904209] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Submit Request

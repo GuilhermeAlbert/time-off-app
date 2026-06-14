@@ -14,17 +14,27 @@ const tomorrow = new Date(today);
 tomorrow.setDate(today.getDate() + 1);
 const dayAfterTomorrow = new Date(today);
 dayAfterTomorrow.setDate(today.getDate() + 2);
+const yesterday = new Date(today);
+yesterday.setDate(today.getDate() - 1);
+
+// start and end that produce 20 days (> 18 available for New York)
+const farFuture = new Date(today);
+farFuture.setDate(today.getDate() + 1);
+const farFutureEnd = new Date(today);
+farFutureEnd.setDate(today.getDate() + 20);
 
 function fmt(d: Date): string {
-  return d.toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 const tomorrowStr = fmt(tomorrow);
 const dayAfterTomorrowStr = fmt(dayAfterTomorrow);
-
-const yesterday = new Date(today);
-yesterday.setDate(today.getDate() - 1);
 const yesterdayStr = fmt(yesterday);
+const farFutureStr = fmt(farFuture);
+const farFutureEndStr = fmt(farFutureEnd);
 
 const mockBalances: TimeOffBalance[] = [
   {
@@ -115,6 +125,26 @@ describe("RequestForm — location option values are locationIds", () => {
   });
 });
 
+describe("RequestForm — days requested computed from dates", () => {
+  it("shows computed days when both dates are selected", async () => {
+    renderForm();
+    fireEvent.change(screen.getByLabelText(/start date/i), {
+      target: { value: tomorrowStr },
+    });
+    fireEvent.change(screen.getByLabelText(/end date/i), {
+      target: { value: dayAfterTomorrowStr },
+    });
+    await waitFor(() => {
+      expect(screen.getByText(/2 days/i)).toBeInTheDocument();
+    });
+  });
+
+  it("shows placeholder text when no dates are selected", () => {
+    renderForm();
+    expect(screen.getByText(/select dates above/i)).toBeInTheDocument();
+  });
+});
+
 describe("RequestForm — balance info display", () => {
   it("shows available and pending days when a location is selected", async () => {
     renderForm();
@@ -160,9 +190,6 @@ describe("RequestForm — date validations", () => {
     fireEvent.change(screen.getByLabelText(/end date/i), {
       target: { value: tomorrowStr },
     });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "1" },
-    });
     fireEvent.click(screen.getByRole("button", { name: /submit request/i }));
     await waitFor(() => {
       expect(
@@ -181,9 +208,6 @@ describe("RequestForm — date validations", () => {
     });
     fireEvent.change(screen.getByLabelText(/end date/i), {
       target: { value: yesterdayStr },
-    });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "1" },
     });
     fireEvent.click(screen.getByRole("button", { name: /submit request/i }));
     await waitFor(() => {
@@ -204,9 +228,6 @@ describe("RequestForm — date validations", () => {
     fireEvent.change(screen.getByLabelText(/end date/i), {
       target: { value: tomorrowStr },
     });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "1" },
-    });
     fireEvent.click(screen.getByRole("button", { name: /submit request/i }));
     await waitFor(() => {
       expect(
@@ -216,36 +237,18 @@ describe("RequestForm — date validations", () => {
   });
 });
 
-describe("RequestForm — days requested validations", () => {
-  it("shows error when days requested is zero", async () => {
+describe("RequestForm — balance exceeded (computed from dates)", () => {
+  it("shows balance exceeded message when computed days exceed available balance", async () => {
+    // farFuture → farFutureEnd = 20 days > 18 available for New York
     renderForm();
     fireEvent.change(screen.getByLabelText(/location/i), {
       target: { value: "new-york" },
     });
     fireEvent.change(screen.getByLabelText(/start date/i), {
-      target: { value: tomorrowStr },
+      target: { value: farFutureStr },
     });
     fireEvent.change(screen.getByLabelText(/end date/i), {
-      target: { value: dayAfterTomorrowStr },
-    });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "0" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /submit request/i }));
-    await waitFor(() => {
-      expect(
-        screen.getByText(/requested days must be greater than zero/i),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("shows balance exceeded message when days exceed available balance", async () => {
-    renderForm();
-    fireEvent.change(screen.getByLabelText(/location/i), {
-      target: { value: "new-york" },
-    });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "99" },
+      target: { value: farFutureEndStr },
     });
     await waitFor(() => {
       expect(
@@ -254,13 +257,16 @@ describe("RequestForm — days requested validations", () => {
     });
   });
 
-  it("disables submit when days exceed available balance", async () => {
+  it("disables submit when computed days exceed available balance", async () => {
     renderForm();
     fireEvent.change(screen.getByLabelText(/location/i), {
       target: { value: "new-york" },
     });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "99" },
+    fireEvent.change(screen.getByLabelText(/start date/i), {
+      target: { value: farFutureStr },
+    });
+    fireEvent.change(screen.getByLabelText(/end date/i), {
+      target: { value: farFutureEndStr },
     });
     await waitFor(() => {
       expect(
@@ -271,7 +277,7 @@ describe("RequestForm — days requested validations", () => {
 });
 
 describe("RequestForm — valid submission", () => {
-  it("calls submit handler with locationId, not the display label", async () => {
+  it("calls submit handler with locationId and computed daysRequested", async () => {
     const onSubmit = vi.fn();
     renderForm(mockBalances, false, onSubmit);
 
@@ -284,18 +290,14 @@ describe("RequestForm — valid submission", () => {
     fireEvent.change(screen.getByLabelText(/end date/i), {
       target: { value: dayAfterTomorrowStr },
     });
-    fireEvent.change(screen.getByLabelText(/days requested/i), {
-      target: { value: "3" },
-    });
     fireEvent.click(screen.getByRole("button", { name: /submit request/i }));
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           locationId: "new-york",
-          daysRequested: 3,
+          daysRequested: 2,
         }),
-        expect.anything(),
       );
     });
   });

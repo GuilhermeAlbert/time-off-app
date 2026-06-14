@@ -27,9 +27,6 @@ export const requestSchema = z
         (val) => parseLocalDate(val) >= todayLocalMidnight(),
         "End date cannot be in the past",
       ),
-    daysRequested: z
-      .number({ error: "Days requested is required" })
-      .gt(0, "Requested days must be greater than zero"),
     notes: z.string().optional(),
   })
   .refine(

@@ -79,10 +79,7 @@ async function fillAndSubmit(canvasElement: HTMLElement) {
     target: { value: "2026-08-01" },
   });
   fireEvent.change(canvas.getByLabelText(/end date/i), {
-    target: { value: "2026-08-05" },
-  });
-  fireEvent.change(canvas.getByLabelText(/days requested/i), {
-    target: { value: "3", valueAsNumber: 3 },
+    target: { value: "2026-08-03" },
   });
   await userEvent.click(
     canvas.getByRole("button", { name: /submit request/i }),
